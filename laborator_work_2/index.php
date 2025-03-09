@@ -2,15 +2,15 @@
 
 function day($day) {
      switch ($day) {
-        case "понедельник";
-        case "среда";
-        case "пятница";
+        case 1;
+        case 3;
+        case 5;
             echo "<td>8:00-12:00</td>";
             echo "<td>Нерабочий день</td>";
             break;
-        case "вторник";
-        case "четверг";
-        case "суббота";
+        case 2;
+        case 4;
+        case 6;
             echo "<td>Нерабочий день</td>";
             echo "<td>12:00-16:00</td>";
             break;
@@ -46,7 +46,7 @@ function day($day) {
         <th>Jane Doe</th>
     </tr>
     <tr>
-        <?php day("четверг"); ?>
+        <?php day(date("N")); ?>
     </tr>
 </table>
 
