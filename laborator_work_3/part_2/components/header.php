@@ -11,7 +11,7 @@
     <p class="header__logo"></p>
     <nav class="header__nav">
         <ul class="header__nav-items">
-            <li class="item"><a href="http://localhost:8080">Первое задание</a></li>
+            <li class="item"><a href="..">Первое задание</a></li>
             <li class="item"><a href="#">Битые хонды</a></li>
             <li class="item"><a href="#">Живые ауди</a></li>
         </ul>

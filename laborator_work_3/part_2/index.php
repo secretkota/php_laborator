@@ -18,6 +18,3 @@
     require_once './components/content.php';
     require_once './components/footer.php';
     ?>
-
-</body>
-</html>

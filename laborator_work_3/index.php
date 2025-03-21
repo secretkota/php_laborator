@@ -1,7 +1,21 @@
 <?php
 
 declare(strict_types=1);
- 
+
+/**
+ * Создание массива
+ *
+ * @var array<int, array{
+ * id:int,
+ * date: string,
+ * amount: float,
+ * description: string,
+ * merchant: string
+ * }> $transactions
+ * 
+ * 
+ */
+
 $transactions = [
     [
         "id" => 1,
@@ -19,55 +33,103 @@ $transactions = [
     ],
 ];
 
-
+/**
+ * 
+ * Сортировка массива по убыванию
+ * 
+ */
 usort($transactions, function ($a, $b) {
     return $b["amount"] <=> $a["amount"];
 });
 
-function addTransaction(int $id, string $date, float $amount, string $description, string $merchant): void {
+/**
+ * 
+ * Добавление новой транзакции
+ * 
+ * @param int $id - id transaction
+ * @param string $date - date transaction
+ * @param float $amount - amount transaction
+ * @param string $description - description transaction
+ * @param string $merchant - place where something was bought
+ * @return void
+ */
+function addTransaction(int $id, string $date, float $amount, string $description, string $merchant): void
+{
     global $transactions;
     $transactions[] = [
-        "id" => $id, 
-        "date" => $date, 
-        "amount" => $amount, 
-        "description"=> $description, 
-        "merchant"=>$merchant
+        "id" => $id,
+        "date" => $date,
+        "amount" => $amount,
+        "description" => $description,
+        "merchant" => $merchant
     ];
 }
 
 addTransaction(3, "2009-06-20", 2000.90, "test", "test");
 addTransaction(4, "2021-06-20", 2000.90, "test1", "test2");
 
+/**
+ * 
+ * Поиск транзакции по описанию
+ * 
+ * @param string $description - string of description
+ * @param array $transaction - array where find transaction
+ * @return int|string
+ */
+function findTransactionByDescription(string $descriptionPart, array $transactions)
+{
+    $key = array_search($descriptionPart, array_column($transactions, 'description'));
 
-function findTransactionByDescription(string $descriptionPart, array $transactions){
-    $descVal = array_column($transactions, 'description');
-    $key = array_search($descriptionPart, $descVal);
-
-    echo $transactions[$key]['id'];
+    return $transactions[$key]['id'];
 }
 
-function calculateTotalAmount(array $transactions): float{
+/**
+ * 
+ * Подсчет всего по amount
+ * 
+ * @param array $transaction - array where count all amount
+ * @return float
+ */
+function calculateTotalAmount(array $transactions): float
+{
     $sum = 0.0;
 
     foreach ($transactions as $transactions) {
         $sum += $transactions["amount"];
     }
 
+    // array_sum($transactions, array_column($transations, 'amount'))
     return $sum;
 }
 
-function findTransactionById(int $id, array $transactions) {
-    foreach ($transactions as $transaction){
+/**
+ * 
+ * Поиск транзакции по айди
+ * 
+ * @param int $id - id a transaction
+ * @param array $transaction - transaction where find by id something
+ * @return array|string
+ */
+
+function findTransactionById(int $id, array $transactions)
+{
+    foreach ($transactions as $transaction) {
         if ($transaction["id"] === $id) {
-            echo "Сущевствует";
-            return;
+            return $transaction['name'];
         }
     }
 
-    echo "Не существует";
+    return "Не существует";
 }
 
-function daysSinceTransaction(array $transactions) {
+/**
+ * Вычисляет количество дней с момента транзакции.
+ *
+ * @param array $transaction 
+ * @return int
+ */
+function daysSinceTransaction(array $transactions)
+{
     $currentDate = new DateTime();
     $transactionDate = new DateTime($transactions["date"]);
     $diff = $transactionDate->diff($currentDate);
@@ -79,11 +141,13 @@ function daysSinceTransaction(array $transactions) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <table border='1'>
         <thead>
@@ -95,25 +159,26 @@ function daysSinceTransaction(array $transactions) {
             <td>была</td>
         </thead>
         <tbody>
-            <?php foreach($transactions as $transaction) : ?>
-            <tr>
-                <td><?= $transaction["id"]?></td>
-                <td><?= $transaction["date"]?></td>
-                <td><?= $transaction["amount"]?></td>
-                <td><?= $transaction["description"]?></td>
-                <td><?= $transaction["merchant"]?></td>
-                <td><?= daysSinceTransaction($transaction)?></td>
-            </tr>
+            <?php foreach ($transactions as $transaction) : ?>
+                <tr>
+                    <td><?= $transaction["id"] ?></td>
+                    <td><?= $transaction["date"] ?></td>
+                    <td><?= $transaction["amount"] ?></td>
+                    <td><?= $transaction["description"] ?></td>
+                    <td><?= $transaction["merchant"] ?></td>
+                    <td><?= daysSinceTransaction($transaction) ?></td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-    <?= "Total sum amounts:". calculateTotalAmount($transactions) ?>;
+    <?php echo "Total sum amounts:" . calculateTotalAmount($transactions) ?>;
     <br>
     <p>Транзакция по описанию имеет айди:</p>
-    <?= findTransactionByDescription("test", $transactions) ?>
+    <?php echo findTransactionByDescription("test", $transactions) ?>
     <p>Транзация по айди</p>
-    <?= findTransactionById(9, $transactions) ?>
+    <?php echo findTransactionById(9, $transactions) ?>
     <br>
-    <a href="http://localhost:808/part_2" style="text-decoration: none;">Переход ко 2 заданию.</a>
+    <a href="/part_2/" style="text-decoration: none;">Переход ко 2 заданию.</a>
 </body>
+
 </html>
