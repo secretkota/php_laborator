@@ -1,44 +1,43 @@
-<?php
-
-require_once __DIR__ . '/../helpers.php';
+<?php 
+require_once '../../helpers.php';
 
 $title = trim($_POST['title']);
 $category = trim($_POST['category']);
 $description = trim($_POST['description']);
-$price = trim($_POST['price']);
+$tags = trim($_POST['tags']);
+$tags = (array) $tags;
 
-$errors = [];
+$errorValid = [];
 
-if ($title === '') {
-    $errors['title'] = 'Заполните название товара.';
-} else if ($title < 3){
-    $errors['title'] = 'Ваш заголовок меньше 3-х символов';
-} 
-if ($category == ''){
-    $errors['category'] = 'Укажите одну из категорий вашего товара.';
+if (empty($title)) {
+    $errors[] = "Название объявления обязательно.";
 }
-if ($description === ''){
-    $errors['description'] = 'Укажите описание товара.';
+if (empty($category)) {
+    $errors[] = "Выберите категорию.";
 }
-if ($price == '' || $price < 0 || !is_numeric($price)) {
-    $errors['price'] = 'Укажите цену больше 0, и цифрой.';
+if (empty($description)) {
+    $errors[] = "Введите описание.";
 }
 
 if (!empty($errors)) {
-    header('Location: /ads/create.php');
+    foreach ($errors as $error) {
+        echo "<p style='color:red;'>$error</p>";
+    }
+    echo "<a href='../../public/ad/create.php'>Назад</a>";
     exit;
 }
 
-$saveAds = [
+$newAd = [
     'title' => htmlspecialchars($title),
     'category' => htmlspecialchars($category),
-    'description' => htmlspecialchars($description),
-    'price' => htmlspecialchars($price),
-    'createData' => date('d-m-y h:m')
+    'description' => nl2br(htmlspecialchars($description)),
+    'tags' => array_map('htmlspecialchars', $tags),
+    'date' => date('Y-m-d H:i:s')
 ];
 
-$file = '../../storage/ads.txt';
-file_put_contents($file, json_encode($saveAds), FILE_APPEND);
+$file = __DIR__ . '/../../storage/ads.txt';
+file_put_contents($file, json_encode($newAd) . PHP_EOL, FILE_APPEND);
 
-header('Location: /index.php');
+header('Location: ../../public/index.php');
+
 exit;

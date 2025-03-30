@@ -3,30 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Ads</title>
+    <title>Заполение объявления!</title>
 </head>
-<body> 
-    <form 
-    action="/handle_create.php"
-    method="post" 
-    autocomplete="off">
-        <label>Название товара:</label><br />
-        <input type="text" name="title" required><br />
-        
-        <label>Категории:</label>
-        <select name="category" required>
-            <option value="cars">Машины</option>
-            <option value="clothes">Одежда</option>
-            <option value="houses">Недвижимость</option>
-        </select><br/>
+<body>
+    <h1>Заполните объявление!</h1>
+    <form action="../src/handlers/handle_create.php" method="post">
+    <label>Название объявления:
+            <input type="text" name="title" required>
+        </label><br><br>
 
-        <label>Описание:</label><br>
-        <textarea name="description" required></textarea><br/>
-    
-        <label>Цена:</label>
-        <input type="number" name="price" min="0" required><br/>
-    
-        <button type="submit">Опубликовать</button>
+        <label>Категория:
+            <select name="category" required>
+                <option value="sell">Продажа</option>
+                <option value="car">Машины</option>
+                <option value="job">Работа</option>
+            </select>
+        </label><br><br>
+
+        <label>Описание:<br>
+            <textarea name="description" required></textarea>
+        </label><br><br>
+
+        <label>Теги:
+            <select name="tags[]" multiple>
+                <option value="houses">Недвижимость</option>
+                <option value="cars">Авто</option>
+            </select>
+        </label><br><br>
+
+        <button type="submit">Отправить</button>
     </form>
 </body>
 </html>

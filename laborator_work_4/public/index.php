@@ -1,20 +1,38 @@
 <?php
-$file = __DIR__ . '/../storage/ads.txt';
 
-if (!file_exists($file)) {
-    echo '<p>Нет объявлений</p>';
-    exit;
-}
+    $adData = __DIR__ . '/../storage/ads.txt';
 
-$lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-$ads = array_map('json_decode', $lines);
+    $ads = file_exists($adData) ? file($adData, FILE_IGNORE_NEW_LINES) : []; 
+    $ads = array_map(function($item) {
+        return json_decode($item, true);  // Decode each item as an associative array
+    }, $ads);
+    $lastAds = array_slice($ads, 0, 2);
+?>
 
-echo '<h1>Список объявлений</h1>';
-
-foreach (array_reverse($ads) as $ad) {
-    echo '<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">';
-    echo '<h3>' . htmlspecialchars($ad->title) . '</h3>';
-    echo '<p>' . htmlspecialchars($ad->description) . '</p>';
-    echo '<small>' . $ad->created_at . '</small>';
-    echo '</div>';
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Объявления!</title>
+</head>
+<body>
+    <h1>Недавно добавлены:</h1>
+    <?php if (empty($lastAds)) : ?>
+        <p>Объявлений пока нет.</p>
+    <?php else : ?>
+        <ul>
+            <?php foreach ($lastAds as $ad) :?>
+                <li>
+                <strong><?= htmlspecialchars($ad['title']) ?></strong><br>
+                    Категория: <?= htmlspecialchars($ad['category']) ?><br>
+                    Описание: <?= nl2br(htmlspecialchars($ad['description'])) ?><br>
+                    <small>Теги: <?= implode(', ', $ad['tags']) ?></small>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <a href="ad/index.php">Смотреть все объявления</a> |
+    <a href="ad/create.php">Добавить объявление</a>
+</body>
+</html>
