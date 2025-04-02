@@ -4,7 +4,7 @@
 
     $ads = file_exists($adData) ? file($adData, FILE_IGNORE_NEW_LINES) : []; 
     $ads = array_map(function($item) {
-        return json_decode($item, true);  // Decode each item as an associative array
+        return json_decode($item, true); 
     }, $ads);
     $lastAds = array_slice($ads, 0, 2);
 ?>
@@ -32,7 +32,7 @@
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
-    <a href="ad/index.php">Смотреть все объявления</a> |
-    <a href="ad/create.php">Добавить объявление</a>
+    <a href="/index.php">Смотреть все объявления</a> |
+    <a href="/create.php">Добавить объявление</a>
 </body>
 </html>

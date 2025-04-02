@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . "/../src/handlers/handle_create.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
 </head>
 <body>
     <h1>Заполните объявление!</h1>
-    <form action="../src/handlers/handle_create.php" method="post">
+    <form action="<?= $_SERVER["PHP_SELF"]; ?>" method="post">
     <label>Название объявления:
             <input type="text" name="title" required>
         </label><br><br>
