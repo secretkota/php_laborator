@@ -1,12 +1,28 @@
 <?php
+/**
+ * Путь к файлу с объявлениями.
+ */
+$adData = __DIR__ . '/../storage/ads.txt';
 
-    $adData = __DIR__ . '/../storage/ads.txt';
+/**
+ * Считывание из файла.
+ * Если файл существует, считываем его построчно без символов перевода строки.
+ * Затем декодируем каждую строку из JSON в ассоциативный массив.
+ * Если файл не найден — устанавливаем пустой массив.
+ *
+ * @var array $ads Массив всех объявлений.
+ */
+$ads = file_exists($adData) ? file($adData, FILE_IGNORE_NEW_LINES) : []; 
+$ads = array_map(function($item) {
+    return json_decode($item, true); 
+}, $ads);
 
-    $ads = file_exists($adData) ? file($adData, FILE_IGNORE_NEW_LINES) : []; 
-    $ads = array_map(function($item) {
-        return json_decode($item, true); 
-    }, $ads);
-    $lastAds = array_slice($ads, 0, 2);
+/**
+ * Получение последних двух объявлений.
+ *
+ * @var array $lastAds Массив с последними двумя объявлениями.
+ */
+$lastAds = array_slice($ads, 0, 2);
 ?>
 
 <!DOCTYPE html>
@@ -18,15 +34,34 @@
 </head>
 <body>
     <h1>Недавно добавлены:</h1>
-    <?php if (empty($lastAds)) : ?>
+        <?php if (empty($lastAds)) : ?>
+        <!-- 
+            Если массив $lastAds пустой, выводим сообщение об отсутствии объявлений.
+        -->
         <p>Объявлений пока нет.</p>
     <?php else : ?>
+        <!-- 
+            Если есть объявления, отображаем их список (только последние два).
+        -->
         <ul>
-            <?php foreach ($lastAds as $ad) :?>
+            <?php foreach ($lastAds as $ad) : ?>
                 <li>
-                <strong><?= htmlspecialchars($ad['title']) ?></strong><br>
+                    <!-- 
+                        Вывод заголовка объявления.
+                        htmlspecialchars защищает от XSS.
+                    -->
+                    <strong><?= htmlspecialchars($ad['title']) ?></strong><br>
+                    <!-- 
+                        Вывод категории объявления.
+                    -->
                     Категория: <?= htmlspecialchars($ad['category']) ?><br>
-                    Описание: <?= nl2br(htmlspecialchars($ad['description'])) ?><br>
+                    <!-- 
+                        Описание объявления с сохранением переносов строк.
+                    -->
+                    Описание: <?= htmlspecialchars($ad['description']) ?><br>
+                    <!-- 
+                        Теги объявления, объединённые через запятую.
+                    -->
                     <small>Теги: <?= implode(', ', $ad['tags']) ?></small>
                 </li>
             <?php endforeach; ?>

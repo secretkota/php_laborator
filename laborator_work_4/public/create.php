@@ -1,4 +1,10 @@
-<?php require_once __DIR__ . "/../src/handlers/handle_create.php"; ?>
+<?php 
+/**
+ * 
+ * Вызов слушателя
+ */
+require_once __DIR__ . "/../src/handlers/handle_create.php"; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
